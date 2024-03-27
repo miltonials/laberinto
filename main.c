@@ -5,9 +5,8 @@
 
 
 #include "./heads/util.h"
-#include "./heads/menu.h"
 #include "./heads/structs.h"
-#include "./heads/validaciones.h"
+#include "./heads/menu.h"
 
 int main() {
   menuPrincipal();

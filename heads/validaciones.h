@@ -41,30 +41,39 @@ int posicionInicialVacia(char *contenido) {
   return true;
 }
 
-bool mismaCantidadCaracteres(char *contenido) {
+bool mismaCantidadCaracteres(struct Laberinto *laberinto) {
   int cantidadCaracteres = 0;
-  int filaAnterior = 0;
-  for (int i = 0; i < strlen(contenido); i++) {
-    if (contenido[i] == '\n') {
-      if (filaAnterior == 0) {
-        filaAnterior = cantidadCaracteres;
+  int columnasFilaAnterior = 0;
+  int cantidadFilas = 0;
+
+  for (int i = 0; i < strlen(laberinto -> mapa); i++) {
+    if (laberinto -> mapa[i] == '\n') {
+      if (columnasFilaAnterior == 0) {
+        columnasFilaAnterior = cantidadCaracteres;
       } else {
-        if (filaAnterior != cantidadCaracteres) {
+        if (columnasFilaAnterior != cantidadCaracteres) {
           printf("\nError: No se cuenta con la misma cantidad de caracteres en todas las filas.\n");
           return false;
         }
       }
+      cantidadFilas++;
       cantidadCaracteres = 0;
     } else {
       cantidadCaracteres++;
     }
   }
+
+  laberinto -> filas = cantidadFilas + 2;
+  laberinto -> columnas = columnasFilaAnterior; // cuenta el salto de linea como 1
+
   return true;
 }
 
-bool laberintoPermitido(char *contenido) {
-  
-  return (tieneSalida(contenido) && caracteresPermitidos(contenido) && mismaCantidadCaracteres(contenido) && posicionInicialVacia(contenido));
+bool laberintoPermitido(struct Laberinto *laberinto) {
+  return tieneSalida(laberinto -> mapa) &&
+         caracteresPermitidos(laberinto -> mapa) &&
+         mismaCantidadCaracteres(laberinto) &&
+         posicionInicialVacia(laberinto -> mapa);
 }
 
 #endif
