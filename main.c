@@ -25,6 +25,64 @@ void menuPrincipal() {
   }
 }
 
+
+
+// Función para verificar si el laberinto tiene salida
+int tieneSalida(FILE *archivo) {
+  // recorrer el archivo para verificar si tiene salida debe haber un / 
+  fseek(archivo, 0, SEEK_SET);
+  char caracter;
+  while ((caracter = fgetc(archivo)) != EOF) {
+    printf("%c", caracter);
+    if (caracter == '/') {
+      return 1;
+    }
+  }
+  printf("\nError: El laberinto no tiene salida.\n");
+  return 0;
+}
+
+// Función para verificar si el laberinto solo tiene caracteres permitidos
+int caracteresPermitidos(FILE *archivo) {
+  fseek(archivo, 0, SEEK_SET);
+  char caracter;
+  // recorrer el archivo para verificar si tiene caracteres permitidos /, *, saltos de linea y espacio en blanco
+  while ((caracter = fgetc(archivo)) != EOF) {
+    printf("%c", caracter);
+    if (caracter == '/' || caracter == '*' || caracter == '\n' || caracter == ' ' || caracter == '\r') {
+      continue;
+    } else {
+      printf("\nError: El laberinto contiene caracteres no permitidos.\n");
+      printf("%c", "El caracter no permitido es: ", caracter);
+      return 0;
+    }
+  }
+  return 1;
+}
+
+// Función para verificar que no haya saltos de línea vacíos
+int noSaltosLineaVacios(FILE *archivo) {
+  fseek(archivo, 0, SEEK_SET);
+  char caracter;
+  while ((caracter = fgetc(archivo)) != EOF) {
+    if (caracter == '\n' && fgetc(archivo) == '\n') {
+      printf("\nError: El archivo contiene saltos de línea vacíos.\n");
+      return 0;
+    }
+  }
+  return 1;
+}
+
+// Función para verificar que la posición 0,0 esté vacía
+int posicionInicialVacia(FILE *archivo) {
+  fseek(archivo, 0, SEEK_SET);
+  if (fgetc(archivo) != ' ') {
+    printf("\nError: La posición 0,0 no está vacía.\n");
+    return 0;
+  }
+  return 1;
+}
+
 // Función para cargar el laberinto
 void cargarLaberinto() {
   char rutaArchivo[100];
@@ -50,6 +108,24 @@ void cargarLaberinto() {
     3. No deben haber saltos de linea vacíos
     4. la posición 0,0 debe estar vacía
   */
+  // imprimir laberinto
+  char caracter;
+  int contador = 0;
+  while ((caracter = fgetc(archivo)) != EOF) {
+    printf("%c", caracter);
+    printf("%d", contador);
+    contador++;
+  }
+
+  // caracteres permitidos /, *, saltos de linea y espacio en blanco
+  // Validar condiciones adicionales
+  if (!tieneSalida(archivo) || !caracteresPermitidos(archivo) || !noSaltosLineaVacios(archivo) || !posicionInicialVacia(archivo)) {
+    fclose(archivo);
+    menuPrincipal();
+    return;
+  }
+  
+  
 
   // Mostrar opciones Iniciar juego y Volver
   int opcion;
