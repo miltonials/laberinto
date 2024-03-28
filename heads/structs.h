@@ -1,79 +1,24 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-struct ThreadPoint {
-  int x;
-  int y;
-  int direccion; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
-};
+
 
 struct Laberinto {
   char *mapa;
   char **tablero;
   int filas;
   int columnas;
+  int cantidadHilosCreados;
+  int cantidadHilosMuertos;
 };
 
-#include "validaciones.h"
-
-void asignarMemoriaTablero(struct Laberinto *laberinto) {
-  int filas = laberinto -> filas, columnas = laberinto -> columnas;
-
-  // Asignación de memoria para las filas
-  laberinto -> tablero = (char **) malloc(filas * sizeof(char *));
-
-  // Asignación de memoria para las columnas
-  for (int i = 0; i < filas; i++) {
-    laberinto ->tablero[i] = (char *)malloc(columnas * sizeof(char));
-  }
-}
-
-void rellenarTablero(struct Laberinto *laberinto) {
-  int filas = laberinto -> filas, columnas = laberinto -> columnas;
-  int contador = 0;
-
-  for (int i = 0; i < filas ; i++) {
-    for (int j = 0; j < columnas ; j++) {
-      laberinto -> tablero[i][j] = laberinto -> mapa[contador];
-      //printf("%c", laberinto -> tablero[i][j]);
-      contador++;
-    }
-  }
-}
-
-void cargarTableroLaberinto(struct Laberinto *laberinto) {
-  asignarMemoriaTablero(laberinto);
-  rellenarTablero(laberinto);
-}
-
-
-void cargarLaberinto() {
-  struct Laberinto laberinto;
-  char rutaArchivo[100];
-  char *contenido;
-
-  // Solicitar la ruta del archivo
-  printf("\nIngrese la ruta del archivo .txt: ");
-  scanf("%s", rutaArchivo);
-
-  if(!existeArchivo(rutaArchivo)){
-    printf("\nError: El archivo no existe o está vacío.\n");
-  }
-
-  contenido = leerArchivo(rutaArchivo);
-  laberinto.mapa = contenido;
-  
-  if (laberintoPermitido(&laberinto)) {
-    printf("Mapa:\n%s\n", laberinto.mapa);
-    printf("Cantidad filas: %d\n", laberinto.filas);
-    printf("Cantidad columnas: %d\n", laberinto.columnas);
-    cargarTableroLaberinto(&laberinto);
-    printf("¡Laberinto cargado!\n");
-    //iniciar juego
-  }
-  else {
-    printf("\nError: El laberinto no cumple con las condiciones necesarias.\n");
-  }
-}
+struct ThreadPoint {
+  int id;
+  int fila;
+  int columna;
+  int dir; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
+  struct Laberinto *gps;
+  pthread_t thread;
+};
 
 #endif

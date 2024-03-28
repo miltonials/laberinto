@@ -10,10 +10,11 @@ void menuPrincipal() {
     printf("2. Salir\n\n");
     printf("Ingrese una opción: ");
     scanf("%d", &opcion);
-    
+    // opcion = 1;
     switch (opcion) {
       case 1:
         cargarLaberinto();
+        //return;
         break;
       case 2:
         printf("\n¡Hasta pronto!\n");

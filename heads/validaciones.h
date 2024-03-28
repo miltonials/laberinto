@@ -63,8 +63,8 @@ bool mismaCantidadCaracteres(struct Laberinto *laberinto) {
     }
   }
 
-  laberinto -> filas = cantidadFilas + 2;
-  laberinto -> columnas = columnasFilaAnterior; // cuenta el salto de linea como 1
+  laberinto -> filas = cantidadFilas;
+  laberinto -> columnas = columnasFilaAnterior - 1; // cuenta el salto de linea como 1
 
   return true;
 }
