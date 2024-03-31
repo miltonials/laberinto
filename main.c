@@ -5,8 +5,8 @@
 #include <pthread.h>
 
 
-#include "./heads/util.h"
 #include "./heads/structs.h"
+#include "./heads/util.h"
 #include "./heads/funcionesLaberinto.h"
 #include "./heads/menu.h"
 

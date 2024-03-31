@@ -31,4 +31,21 @@ char *leerArchivo(char *nombreArchivo) {
   return contenido;
 }
 
+void escribirArchivoLaberinto(struct Laberinto *laberinto) {
+  FILE *archivo = fopen("laberinto.txt", "w");
+  if (archivo == NULL) {
+    printf("Error al abrir el archivo\n");
+    exit(1);
+  }
+
+  for (int i = 0; i < laberinto->filas; i++) {
+    for (int j = 0; j < laberinto->columnas; j++) {
+      fprintf(archivo, "%c", laberinto->tablero[i][j]);
+    }
+    fprintf(archivo, "\n");
+  }
+
+  fclose(archivo);
+}
+
 #endif

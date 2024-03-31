@@ -1,8 +1,11 @@
 #ifndef FUNCIONESLABERINTO_H
 #define FUNCIONESLABERINTO_H
 
+#include <unistd.h>
+
 #include "validaciones.h"
 #include "./hilosLaberinto.h"
+
 
 void asignarMemoriaTablero(struct Laberinto *laberinto) {
   int filas = laberinto -> filas, columnas = laberinto -> columnas;
@@ -72,7 +75,13 @@ void cargarLaberinto() {
     printf("¡Laberinto cargado!\n");
     //iniciar juego
     imprimirTablero(&laberinto);
-    crearHiloTablero(&laberinto, 0, 0, 1);
+    pthread_mutex_init(&mutex, NULL);
+    // pthread_mutex_init(&mutex, NULL);
+    crearHiloTablero(&laberinto, 0, 0, 1, 0);
+    pthread_mutex_destroy(&mutex);
+    // pthread_mutex_destroy(&mutex);
+    // sleep(5);
+    escribirArchivoLaberinto(&laberinto);
   }
   else {
     printf("\nError: El laberinto no cumple con las condiciones necesarias.\n");
