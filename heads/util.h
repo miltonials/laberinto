@@ -2,6 +2,11 @@
 #define UTIL_H
 
 //archivo existe
+/*
+Función que verifica si un archivo existe.
+entrada: nombreArchivo, nombre del archivo.
+retorna: true si el archivo existe, false en caso contrario.
+*/
 bool existeArchivo(char *nombreArchivo) {
   FILE *archivo = fopen(nombreArchivo, "r");
   if (archivo == NULL) {
@@ -12,6 +17,11 @@ bool existeArchivo(char *nombreArchivo) {
 }
 
 //leer archivo
+/*
+Función que lee un archivo y retorna su contenido.
+entrada: nombreArchivo, nombre del archivo.
+retorna: contenido del archivo.
+*/
 char *leerArchivo(char *nombreArchivo) {
   FILE *archivo = fopen(nombreArchivo, "r");
   if (archivo == NULL) {
@@ -31,6 +41,11 @@ char *leerArchivo(char *nombreArchivo) {
   return contenido;
 }
 
+/*
+Función que escribe un archivo con el laberinto.
+entrada: laberinto, estructura Laberinto.
+salida: no tiene.
+*/
 void escribirArchivoLaberinto(struct Laberinto *laberinto) {
   FILE *archivo = fopen("laberinto.txt", "w");
   if (archivo == NULL) {

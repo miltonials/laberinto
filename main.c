@@ -10,6 +10,11 @@
 #include "./heads/funcionesLaberinto.h"
 #include "./heads/menu.h"
 
+/*
+Funcion principal del programa
+Entrada: No tiene
+Salida: Retorna 0 si todo se ejecuto correctamente
+*/
 int main() {
   menuPrincipal();
   return 0;

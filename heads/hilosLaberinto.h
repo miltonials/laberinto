@@ -5,6 +5,11 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/*
+Funcion que imprime el tablero del laberinto
+Entrada: Estructura Laberinto
+Salida: No tiene
+*/
 void imprimirTablero(struct Laberinto *laberinto) {
   int filas = laberinto->filas, columnas = laberinto->columnas;
   printf("--------------------------------\n");
@@ -19,6 +24,11 @@ void imprimirTablero(struct Laberinto *laberinto) {
 
 void *iniciarHilo(void *puntox);
 
+/*
+Funcion que crea un hilo para el tablero
+Entrada: Estructura Laberinto, fila, columna, dirección y punto
+Salida: No tiene
+*/
 void crearHiloTablero(struct Laberinto *laberinto, int fila, int columna, int dir, struct ThreadPoint *punto) {
   pthread_mutex_init(&mutex, NULL);
   pthread_t t1;
@@ -37,6 +47,11 @@ void crearHiloTablero(struct Laberinto *laberinto, int fila, int columna, int di
   pthread_join(t1, NULL);
 }
 
+/*
+Funcion que crea hilos derivados
+Entrada: id, fila, columna, dirección, pasos y laberinto
+Salida: No tiene
+*/
 void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, struct Laberinto *laberinto) {
   int columnasTablero = laberinto->columnas;
   int filasTablero = laberinto->filas;
@@ -138,6 +153,11 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
   }
 }
 
+/*
+Funcion que imprime la información de un punto
+Entrada: Estructura ThreadPoint
+Salida: No tiene
+*/
 void imprimirInformacionPunto(struct ThreadPoint punto) {
   printf("*********Hilo %d finalizado *********\n", punto.id - 1);
   printf("Fila: %d\n", punto.fila);
@@ -150,6 +170,11 @@ void imprimirInformacionPunto(struct ThreadPoint punto) {
   printf("*************************************\n");
 }
 
+/*
+Funcion que inicia un hilo
+Entrada: Puntero a void
+Salida: No tiene
+*/
 void *iniciarHilo(void *arg) {
   pthread_mutex_lock(&mutex);
   struct ThreadData *data = (struct ThreadData *) arg;

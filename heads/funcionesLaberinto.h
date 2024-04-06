@@ -4,6 +4,11 @@
 #include "validaciones.h"
 #include "./hilosLaberinto.h"
 
+/*
+Funcion que asigna memoria para el tablero del laberinto
+Entrada: Estructura Laberinto
+Salida: No tiene
+*/
 void asignarMemoriaTablero(struct Laberinto *laberinto) {
   int filas = laberinto -> filas, columnas = laberinto -> columnas;
 
@@ -16,6 +21,11 @@ void asignarMemoriaTablero(struct Laberinto *laberinto) {
   }
 }
 
+/*
+Funcion que rellena el tablero del laberinto
+Entrada: Estructura Laberinto
+Salida: No tiene
+*/
 void rellenarTablero(struct Laberinto *laberinto) {
   int filas = laberinto->filas, columnas = laberinto->columnas;
   int contador = 0;
@@ -38,13 +48,21 @@ void rellenarTablero(struct Laberinto *laberinto) {
   }
 }
 
-
+/*
+Funcion que carga el tablero del laberinto
+Entrada: Estructura Laberinto
+Salida: No tiene
+*/
 void cargarTableroLaberinto(struct Laberinto *laberinto) {
   asignarMemoriaTablero(laberinto);
   rellenarTablero(laberinto);
 }
 
-
+/*
+Funcion que carga el laberinto
+Entrada: No tiene
+Salida: No tiene
+*/
 void cargarLaberinto() {
   struct Laberinto laberinto;
   char rutaArchivo[100];
