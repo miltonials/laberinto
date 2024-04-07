@@ -74,7 +74,7 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
     pthread_mutex_lock(&mutex);
     laberinto->cantidadHilosCreados++;
     pthread_mutex_unlock(&mutex);
-    data.punto.id = id + 1;
+    data.punto.id = laberinto->cantidadHilosCreados;
     data.punto.columna = columna + 1;
     data.punto.fila = fila;
     data.punto.dir = 1;
@@ -94,7 +94,7 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
     pthread_mutex_lock(&mutex);
     laberinto->cantidadHilosCreados++;
     pthread_mutex_unlock(&mutex);
-    data.punto.id = id + 1;
+    data.punto.id = laberinto->cantidadHilosCreados;
     data.punto.columna = columna - 1;
     data.punto.fila = fila;
     data.punto.dir = 3;
@@ -114,7 +114,7 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
     pthread_mutex_lock(&mutex);
     laberinto->cantidadHilosCreados++;
     pthread_mutex_unlock(&mutex);
-    data.punto.id = id + 1;
+    data.punto.id = laberinto->cantidadHilosCreados;
     data.punto.columna = columna;
     data.punto.fila = fila + 1;
     data.punto.dir = 2;
@@ -134,7 +134,7 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
     pthread_mutex_lock(&mutex);
     laberinto->cantidadHilosCreados++;
     pthread_mutex_unlock(&mutex);
-    data.punto.id = id + 1;
+    data.punto.id = laberinto->cantidadHilosCreados;
     data.punto.columna = columna;
     data.punto.fila = fila - 1;
     data.punto.dir = 0;
@@ -171,6 +171,29 @@ void imprimirInformacionPunto(struct ThreadPoint punto) {
 }
 
 /*
+Funcion que marca el tablero con un caracter
+Entrada: Estructura Laberinto y ThreadPoint
+Salida: No tiene
+*/
+void marcarTablero(struct Laberinto *laberinto, struct ThreadPoint punto) {
+  int ascii = '0' + punto.id - 1;
+  ascii = (ascii - 48) % (126 - 48 + 1) + 48; // para asegurar que la impressión sea un caracter imprimible
+
+  if (ascii == '/') {
+    laberinto->tablero[punto.fila][punto.columna] = '+';
+  }
+  else if (ascii == '*') {
+    laberinto->tablero[punto.fila][punto.columna] = '-';
+  }
+  else {
+    laberinto->tablero[punto.fila][punto.columna] = ascii;
+  }
+
+  punto.pasos++;
+}
+
+
+/*
 Funcion que inicia un hilo
 Entrada: Puntero a void
 Salida: No tiene
@@ -186,9 +209,9 @@ void *iniciarHilo(void *arg) {
   while (puedeAvanzar) {
     pthread_mutex_lock(&mutex);
     if (laberinto->tablero[punto.fila][punto.columna] == ' ') {
-      laberinto->tablero[punto.fila][punto.columna] = '0' + punto.id - 1;
-      punto.pasos++;
+      marcarTablero(laberinto, punto);
       escribirArchivoLaberinto(laberinto);
+      // system("clear");
       imprimirTablero(laberinto);
       pthread_mutex_unlock(&mutex);
       sleep(1);

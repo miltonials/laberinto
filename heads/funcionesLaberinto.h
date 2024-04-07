@@ -75,6 +75,7 @@ void cargarLaberinto() {
 
   if(!existeArchivo(rutaArchivo)){
     printf("\nError: El archivo no existe o está vacío.\n");
+    return;
   }
 
   contenido = leerArchivo(rutaArchivo);
