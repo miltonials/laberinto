@@ -153,21 +153,26 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
   }
 }
 
+int getPointChar(int id) {
+  int ascii = '0' + id - 1;
+  ascii = (ascii - 48) % (126 - 48 + 1) + 48; // para asegurar que la impressión sea un caracter imprimible
+  return ascii;
+}
+
 /*
 Funcion que imprime la información de un punto
 Entrada: Estructura ThreadPoint
 Salida: No tiene
 */
 void imprimirInformacionPunto(struct ThreadPoint punto) {
-  printf("*********Hilo %d finalizado *********\n", punto.id - 1);
+  printf("========== Hilo %d finalizado ==========\n", punto.id - 1);
   printf("Fila: %d\n", punto.fila);
   printf("Columna: %d\n", punto.columna);
   printf("Dirección: %d\n", punto.dir);
   printf("Pasos: %d\n", punto.pasos);
-  if (punto.isFinished) {
-    printf("¡¡¡¡¡Llegó a la meta!!!!!\n");
-  }
-  printf("*************************************\n");
+  printf("Símbolo en el tablero: %c\n", getPointChar(punto.id));
+  printf("¿Llegó a la meta? %s\n", punto.isFinished ? "Sí" : "No");
+  printf("=====================================\n");
 }
 
 /*
@@ -176,8 +181,7 @@ Entrada: Estructura Laberinto y ThreadPoint
 Salida: No tiene
 */
 void marcarTablero(struct Laberinto *laberinto, struct ThreadPoint punto) {
-  int ascii = '0' + punto.id - 1;
-  ascii = (ascii - 48) % (126 - 48 + 1) + 48; // para asegurar que la impressión sea un caracter imprimible
+  int ascii = getPointChar(punto.id);
 
   if (ascii == '/') {
     laberinto->tablero[punto.fila][punto.columna] = '+';
