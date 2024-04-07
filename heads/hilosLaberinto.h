@@ -59,10 +59,14 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
   pthread_mutex_lock(&mutex);
   pthread_mutex_unlock(&mutex);
 
-  bool canGoUp = dir != 0 && fila - 1 >= 0 && laberinto->tablero[fila - 1][columna] == ' ';
-  bool canGoRigh = dir != 1 && columna + 1 < columnasTablero && laberinto->tablero[fila][columna + 1] == ' ';
-  bool canGoDown = dir != 2 && fila + 1 < filasTablero && laberinto->tablero[fila + 1][columna] == ' ';
-  bool canGoLeft = dir != 3 && columna - 1 >= 0 && laberinto->tablero[fila][columna - 1] == ' ';
+  bool canGoUp = dir != 0 && fila - 1 >= 0 &&
+                  (laberinto->tablero[fila - 1][columna] == ' ' || laberinto->tablero[fila - 1][columna] == '/');
+  bool canGoRigh = dir != 1 && columna + 1 < columnasTablero &&
+                  (laberinto->tablero[fila][columna + 1] == ' ' || laberinto->tablero[fila][columna + 1] == '/');
+  bool canGoDown = dir != 2 && fila + 1 < filasTablero &&
+                  (laberinto->tablero[fila + 1][columna] == ' ' || laberinto->tablero[fila + 1][columna] == '/');
+  bool canGoLeft = dir != 3 && columna - 1 >= 0 &&
+                  (laberinto->tablero[fila][columna - 1] == ' ' || laberinto->tablero[fila][columna - 1] == '/');
 
   pthread_t th[3];
   int cuentaCreados = 0;
@@ -147,10 +151,6 @@ void crearHilosDerivados(int id, int fila, int columna, int dir, int pasos, stru
     th[cuentaCreados++] = t;
     sleep(1);
   }
-  
-  for (int i = 0; i < cuentaCreados; i++) {
-    pthread_join(th[i], NULL);
-  }
 }
 
 int getPointChar(int id) {
@@ -164,7 +164,7 @@ Funcion que imprime la información de un punto
 Entrada: Estructura ThreadPoint
 Salida: No tiene
 */
-void imprimirInformacionPunto(struct ThreadPoint punto) {
+void imprimirInformacionPunto(struct ThreadPoint punto, struct Laberinto *laberinto) {
   printf("========== Hilo %d finalizado ==========\n", punto.id - 1);
   printf("Fila: %d\n", punto.fila);
   printf("Columna: %d\n", punto.columna);
@@ -172,6 +172,18 @@ void imprimirInformacionPunto(struct ThreadPoint punto) {
   printf("Pasos: %d\n", punto.pasos);
   printf("Símbolo en el tablero: %c\n", getPointChar(punto.id));
   printf("¿Llegó a la meta? %s\n", punto.isFinished ? "Sí" : "No");
+  if (punto.isFinished) {
+    printf("=====================================\n");
+    printf("¡¡¡Hilo %d llegó a la meta!!!\n", punto.id - 1);
+    printf("=====================================\n");
+    printf("¿Desea continuar la ejecución? (s/n): ");
+    
+    char continuar;
+    scanf(" %c", &continuar);
+    if (continuar == 'n') {
+      laberinto->terminar = true;
+    }
+  }
   printf("=====================================\n");
 }
 
@@ -210,12 +222,13 @@ void *iniciarHilo(void *arg) {
   pthread_mutex_unlock(&mutex);
 
   bool puedeAvanzar = true;
-  while (puedeAvanzar) {
+  while (puedeAvanzar && !laberinto->terminar) {
     pthread_mutex_lock(&mutex);
     if (laberinto->tablero[punto.fila][punto.columna] == ' ') {
       marcarTablero(laberinto, punto);
       escribirArchivoLaberinto(laberinto);
       // system("clear");
+      // pthread_join(pthread_self(), NULL);
       imprimirTablero(laberinto);
       pthread_mutex_unlock(&mutex);
       sleep(1);
@@ -270,13 +283,13 @@ void *iniciarHilo(void *arg) {
   }
   laberinto->cantidadHilosMuertos++;
   
-  imprimirInformacionPunto(punto);
-  // printf("Estado tablero\n");
-  
-  // imprimirTablero(laberinto);
-  // printf("\n");
-  // printf("Cantidad de hilos creados: %d\n", laberinto->cantidadHilosCreados);
-  // printf("Cantidad de hilos muertos: %d\n", laberinto->cantidadHilosMuertos);
+  pthread_mutex_lock(&mutex);
+  imprimirInformacionPunto(punto, laberinto);
+  pthread_mutex_unlock(&mutex);
+  while(laberinto->cantidadHilosMuertos < laberinto->cantidadHilosCreados) {
+    pthread_mutex_lock(&mutex);
+    pthread_mutex_unlock(&mutex);
+  }
   pthread_exit(NULL);
 }
 

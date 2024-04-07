@@ -17,6 +17,7 @@ struct Laberinto {
   char **tablero;
   int filas;
   int columnas;
+  bool terminar;
   int cantidadHilosCreados;
   int cantidadHilosMuertos;
 };
