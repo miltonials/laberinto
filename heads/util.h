@@ -47,7 +47,7 @@ entrada: laberinto, estructura Laberinto.
 salida: no tiene.
 */
 void escribirArchivoLaberinto(struct Laberinto *laberinto) {
-  FILE *archivo = fopen("laberinto.txt", "w");
+  FILE *archivo = fopen("resultado.txt", "w");
   if (archivo == NULL) {
     printf("Error al abrir el archivo\n");
     exit(1);

@@ -98,8 +98,13 @@ void cargarLaberinto() {
     printf("Cantidad columnas: %d\n", laberinto.columnas);
     cargarTableroLaberinto(&laberinto);
     printf("¡Laberinto cargado!\n");
+    sleep(3);
     //iniciar juego
     crearHiloTablero(&laberinto, 0, 0, 2, &x);
+    printf("El avance del laberinto fue guardado en el archivo 'resultado.txt'.\n");
+    printf("Escribe una letra y presiona enter para volver al menú principal...\n");
+    scanf("%s", rutaArchivo);
+    system("clear");
   }
   else {
     printf("\nError: El laberinto no cumple con las condiciones necesarias.\n");
