@@ -65,9 +65,13 @@ bool mismaCantidadCaracteres(struct Laberinto *laberinto) {
   int cantidadCaracteres = 0;
   int columnasFilaAnterior = 0;
   int cantidadFilas = 0;
+  char test;
 
   for (int i = 0; i < strlen(laberinto -> mapa); i++) {
-    if (laberinto -> mapa[i] == '\n') {
+    if (laberinto -> mapa[i] == '\r') {
+      continue;
+    }
+    else if (laberinto -> mapa[i] == '\n') {
       if (columnasFilaAnterior == 0) {
         columnasFilaAnterior = cantidadCaracteres;
       } else {
@@ -84,7 +88,7 @@ bool mismaCantidadCaracteres(struct Laberinto *laberinto) {
   }
 
   laberinto -> filas = cantidadFilas;
-  laberinto -> columnas = columnasFilaAnterior - 1; // cuenta el salto de linea como 1
+  laberinto -> columnas = columnasFilaAnterior;
 
   return true;
 }

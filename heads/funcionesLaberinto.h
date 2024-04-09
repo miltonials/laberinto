@@ -46,8 +46,6 @@ void rellenarTablero(struct Laberinto *laberinto) {
     }
     printf("\n");
   }
-  printf("soy prueba\n");
-  imprimirTablero(laberinto);
 }
 
 /*
